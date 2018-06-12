@@ -1,0 +1,6 @@
+# Build artifact
+dailyvocab
+
+# VSCode files
+.vscode
+debug
