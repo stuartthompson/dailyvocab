@@ -121,7 +121,7 @@ func (a *App) Render() {
 	case WordListScreen:
 		a.wordListScreen.Render()
 	case ConfigScreen:
-		a.configScreen.Render()
+		a.configScreen.Render(a.configuration)
 	case AboutScreen:
 		a.aboutScreen.Render()
 	}
@@ -158,7 +158,7 @@ func (a *App) loadConfiguration(configFilePath string) (*configuration.AppConfig
 
 	// Unmarshal configuration
 	var config *configuration.AppConfig
-	json.Unmarshal(rawConfig, config)
+	json.Unmarshal(rawConfig, &config)
 	return config, nil
 }
 
@@ -181,17 +181,27 @@ func (a *App) writeDefaultConfiguration(configFilePath string) {
 
 func (a *App) registerKeypressHandlers() {
 	// TODO: Screens should really register their own list of keys vs. having a single global list
-	a.eventListener.RegisterKeypressHandler('?', a.toggleAboutScreen)
+	a.eventListener.RegisterKeypressHandler('?', a.showAboutScreen)
+	a.eventListener.RegisterKeypressHandler('d', a.showDailyWordScreen)
+	a.eventListener.RegisterKeypressHandler('w', a.showWordListScreen)
+	a.eventListener.RegisterKeypressHandler('c', a.showConfigScreen)
 	a.eventListener.RegisterKeypressHandler('q', a.onQuit)
 }
 
-func (a *App) toggleAboutScreen() {
-	if a.currentScreen == AboutScreen {
-		// TODO: Restore previous screen instead of always going to daily word screen
-		a.currentScreen = DailyWordScreen
-	} else {
-		a.currentScreen = AboutScreen
-	}
+func (a *App) showDailyWordScreen() {
+	a.currentScreen = DailyWordScreen
+}
+
+func (a *App) showWordListScreen() {
+	a.currentScreen = WordListScreen
+}
+
+func (a *App) showConfigScreen() {
+	a.currentScreen = ConfigScreen
+}
+
+func (a *App) showAboutScreen() {
+	a.currentScreen = AboutScreen
 }
 
 func (a *App) onQuit() {
