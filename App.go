@@ -18,12 +18,7 @@
 package main
 
 import (
-	"encoding/json"
-	"io/ioutil"
 	"log"
-	"os"
-	"os/user"
-	"path"
 
 	termbox "github.com/nsf/termbox-go"
 	"github.com/stuartthompson/dailyvocab/configuration"
@@ -65,6 +60,7 @@ type App struct {
 func NewApp() *App {
 	app := &App{
 		isRunning:       true,
+		configuration:   &configuration.AppConfig{},
 		dailyWordScreen: &screens.DailyWordScreen{},
 		wordListScreen:  &screens.WordListScreen{},
 		configScreen:    &screens.ConfigScreen{},
@@ -86,14 +82,8 @@ func (a *App) Run() {
 	termbox.SetOutputMode(termbox.Output256)
 	defer termbox.Close()
 
-	// Build configuration file path
-	configFilePath, err := a.buildConfigFilePath()
-	if err != nil {
-		log.Print("Unable to build configuration file path. Exiting.")
-		return
-	}
-	// Load configuration
-	a.configuration, err = a.loadConfiguration(configFilePath)
+	// Read configuration
+	err = a.configuration.ReadConfiguration()
 	if err != nil {
 		log.Print("Unable to read configuration file. Exiting.")
 		return
@@ -127,58 +117,8 @@ func (a *App) Render() {
 	}
 }
 
-// buildConfigFilePath ...
-// Builds the file path for the application configuration file.
-func (a *App) buildConfigFilePath() (string, error) {
-	// Get user's home directory
-	usr, err := user.Current()
-	if err != nil {
-		log.Print("Error getting current user. Error: ", err)
-		return "", err
-	}
-
-	// Build configuration file path
-	configFilePath := path.Join(usr.HomeDir, configFileName)
-
-	return configFilePath, nil
-}
-
-func (a *App) loadConfiguration(configFilePath string) (*configuration.AppConfig, error) {
-	// Create config if it does not exist
-	if _, err := os.Stat(configFilePath); os.IsNotExist(err) {
-		a.writeDefaultConfiguration(configFilePath)
-	}
-
-	// Read configuration file
-	rawConfig, err := ioutil.ReadFile(configFilePath)
-	if err != nil {
-		log.Fatal(err)
-		return nil, err
-	}
-
-	// Unmarshal configuration
-	var config *configuration.AppConfig
-	json.Unmarshal(rawConfig, &config)
-	return config, nil
-}
-
-// writeDefaultConfiguration ...
-// Writes a default configuration file.
-func (a *App) writeDefaultConfiguration(configFilePath string) {
-	log.Print("Writing default configuration")
-	config := configuration.AppConfig{DefaultLanguage: "english"}
-	configJSON, err := json.Marshal(config)
-	if err != nil {
-		log.Print("Error marshaling json.")
-		log.Fatal(err)
-	}
-	err = ioutil.WriteFile(configFilePath, configJSON, 0666)
-	if err != nil {
-		log.Print("Error writing configuration file.")
-		log.Fatal("Error is: ", err)
-	}
-}
-
+// registerKeypressHandlers ...
+// Registers the key press handlers.
 func (a *App) registerKeypressHandlers() {
 	// TODO: Screens should really register their own list of keys vs. having a single global list
 	a.eventListener.RegisterKeypressHandler('?', a.showAboutScreen)
@@ -204,6 +144,8 @@ func (a *App) showAboutScreen() {
 	a.currentScreen = AboutScreen
 }
 
+// onQuit ...
+// Called when the application should quit.
 func (a *App) onQuit() {
 	a.isRunning = false
 }
