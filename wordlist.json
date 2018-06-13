@@ -2,12 +2,14 @@
   {
     "id": 1,
     "translations": [
-      { "english": "hello" },
-      { "french": "bonjour" },
-      { "italian": "hello-italian" },
-      { "spanish": "hello-spanish" },
-      { "german": "hello-german" },
-      { "japanese": "hello-japanese" }
+      { "en-us": "hello" },
+      { "fr": "bonjour" },
+      { "it": "hello-italian" },
+      { "es": "hello-spanish" },
+      { "es-mx": "hello-mexican" },
+      { "de": "hello-german" },
+      { "ja": "hello-japanese" },
+      { "el": "hello-greek" }
     ],
     "meaning": ""
   }
