@@ -1,10 +1,14 @@
 [
-    {
-        "english": "hello",
-        "french": "bonjour",
-        "italian": "hello-italian",
-        "spanish": "hello-spanish",
-        "german": "hello-german",
-        "japanese": "hello-japanese"
-    }
+  {
+    "id": 1,
+    "translations": [
+      { "english": "hello" },
+      { "french": "bonjour" },
+      { "italian": "hello-italian" },
+      { "spanish": "hello-spanish" },
+      { "german": "hello-german" },
+      { "japanese": "hello-japanese" }
+    ],
+    "meaning": ""
+  }
 ]
