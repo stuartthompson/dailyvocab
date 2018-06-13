@@ -26,6 +26,7 @@ import (
 	"path"
 
 	termbox "github.com/nsf/termbox-go"
+	"github.com/stuartthompson/dailyvocab/configuration"
 	"github.com/stuartthompson/dailyvocab/io"
 	"github.com/stuartthompson/dailyvocab/screens"
 )
@@ -38,6 +39,7 @@ type Screen int
 const (
 	DailyWordScreen = iota
 	WordListScreen
+	ConfigScreen
 	AboutScreen
 )
 
@@ -50,10 +52,11 @@ const configFileName = ".dailyvocab"
 type App struct {
 	isRunning       bool
 	eventListener   *io.EventListener
-	configuration   *AppConfig
+	configuration   *configuration.AppConfig
 	currentScreen   Screen
 	dailyWordScreen *screens.DailyWordScreen
 	wordListScreen  *screens.WordListScreen
+	configScreen    *screens.ConfigScreen
 	aboutScreen     *screens.AboutScreen
 }
 
@@ -64,6 +67,7 @@ func NewApp() *App {
 		isRunning:       true,
 		dailyWordScreen: &screens.DailyWordScreen{},
 		wordListScreen:  &screens.WordListScreen{},
+		configScreen:    &screens.ConfigScreen{},
 		aboutScreen:     &screens.AboutScreen{},
 	}
 	app.eventListener = io.NewEventListener(app.Render)
@@ -116,6 +120,8 @@ func (a *App) Render() {
 		a.dailyWordScreen.Render()
 	case WordListScreen:
 		a.wordListScreen.Render()
+	case ConfigScreen:
+		a.configScreen.Render()
 	case AboutScreen:
 		a.aboutScreen.Render()
 	}
@@ -137,7 +143,7 @@ func (a *App) buildConfigFilePath() (string, error) {
 	return configFilePath, nil
 }
 
-func (a *App) loadConfiguration(configFilePath string) (*AppConfig, error) {
+func (a *App) loadConfiguration(configFilePath string) (*configuration.AppConfig, error) {
 	// Create config if it does not exist
 	if _, err := os.Stat(configFilePath); os.IsNotExist(err) {
 		a.writeDefaultConfiguration(configFilePath)
@@ -151,7 +157,7 @@ func (a *App) loadConfiguration(configFilePath string) (*AppConfig, error) {
 	}
 
 	// Unmarshal configuration
-	var config *AppConfig
+	var config *configuration.AppConfig
 	json.Unmarshal(rawConfig, config)
 	return config, nil
 }
@@ -160,7 +166,7 @@ func (a *App) loadConfiguration(configFilePath string) (*AppConfig, error) {
 // Writes a default configuration file.
 func (a *App) writeDefaultConfiguration(configFilePath string) {
 	log.Print("Writing default configuration")
-	config := AppConfig{DefaultLanguage: "english"}
+	config := configuration.AppConfig{DefaultLanguage: "english"}
 	configJSON, err := json.Marshal(config)
 	if err != nil {
 		log.Print("Error marshaling json.")

@@ -15,10 +15,25 @@
 // You should have received a copy of the GNU General Public License
 // along with DailyVocab. If not, see <http://www.gnu.org/licenses/>.
 
-package main
+package screens
 
-// AppConfig ...
-// Represents configuration for the application.
-type AppConfig struct {
-	DefaultLanguage string `json:"DefaultLanguage"`
+import (
+	"github.com/stuartthompson/dailyvocab/configuration"
+	"github.com/stuartthompson/dailyvocab/io"
+)
+
+// ConfigScreen ...
+type ConfigScreen struct {
+	config *configuration.AppConfig
+}
+
+// Render ...
+// Renders the config screen.
+func (s *ConfigScreen) Render() {
+	io.ClearScreen(0)
+	width, height := io.GetWindowSize()
+	io.RenderPaneBorder(0, 0, width-1, height-1, 212, 0)
+	io.RenderText("Config", 1, 1, 255, 0)
+	io.RenderText("Default language:", 1, 3, 255, 0)
+	io.Flush()
 }
