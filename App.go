@@ -85,7 +85,7 @@ func (a *App) Run() {
 	// Read configuration
 	err = a.configuration.ReadConfiguration()
 	if err != nil {
-		log.Print("Unable to read configuration file. Exiting.")
+		log.Print("Unable to read configuration. Exiting.")
 		return
 	}
 
