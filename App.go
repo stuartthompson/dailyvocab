@@ -22,6 +22,7 @@ import (
 
 	termbox "github.com/nsf/termbox-go"
 	"github.com/stuartthompson/dailyvocab/configuration"
+	"github.com/stuartthompson/dailyvocab/entities"
 	"github.com/stuartthompson/dailyvocab/io"
 	"github.com/stuartthompson/dailyvocab/screens"
 )
@@ -48,6 +49,7 @@ type App struct {
 	isRunning       bool
 	eventListener   *io.EventListener
 	configuration   *configuration.AppConfig
+	wordList        *entities.WordList
 	currentScreen   Screen
 	dailyWordScreen *screens.DailyWordScreen
 	wordListScreen  *screens.WordListScreen
@@ -61,6 +63,7 @@ func NewApp() *App {
 	app := &App{
 		isRunning:       true,
 		configuration:   &configuration.AppConfig{},
+		wordList:        &entities.WordList{},
 		dailyWordScreen: &screens.DailyWordScreen{},
 		wordListScreen:  &screens.WordListScreen{},
 		configScreen:    &screens.ConfigScreen{},
@@ -86,6 +89,13 @@ func (a *App) Run() {
 	err = a.configuration.ReadConfiguration()
 	if err != nil {
 		log.Print("Unable to read configuration. Exiting.")
+		return
+	}
+
+	// Read word list
+	err = a.wordList.Read()
+	if err != nil {
+		log.Print("Unable to read word list. Exiting.")
 		return
 	}
 
