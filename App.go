@@ -65,8 +65,6 @@ func NewApp() *App {
 		configuration:   &configuration.AppConfig{},
 		wordList:        &entities.WordList{},
 		dailyWordScreen: &screens.DailyWordScreen{},
-		wordListScreen:  &screens.WordListScreen{},
-		configScreen:    &screens.ConfigScreen{},
 		aboutScreen:     &screens.AboutScreen{},
 	}
 	app.eventListener = io.NewEventListener(app.Render)
@@ -93,11 +91,15 @@ func (a *App) Run() {
 	}
 
 	// Read word list
-	err = a.wordList.Read()
+	err = a.wordList.Load()
 	if err != nil {
 		log.Print("Unable to read word list. Exiting.")
 		return
 	}
+
+	// Initialize screens
+	a.wordListScreen = &screens.WordListScreen{WordList: a.wordList}
+	a.configScreen = &screens.ConfigScreen{Config: a.configuration}
 
 	// Register keypress handlers
 	a.registerKeypressHandlers()
@@ -121,7 +123,7 @@ func (a *App) Render() {
 	case WordListScreen:
 		a.wordListScreen.Render()
 	case ConfigScreen:
-		a.configScreen.Render(a.configuration)
+		a.configScreen.Render()
 	case AboutScreen:
 		a.aboutScreen.Render()
 	}

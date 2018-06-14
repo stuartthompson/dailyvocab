@@ -18,11 +18,13 @@
 package screens
 
 import (
+	"github.com/stuartthompson/dailyvocab/entities"
 	"github.com/stuartthompson/dailyvocab/io"
 )
 
 // WordListScreen ...
 type WordListScreen struct {
+	WordList *entities.WordList
 }
 
 // Render ...
