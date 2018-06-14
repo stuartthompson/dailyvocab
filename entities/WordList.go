@@ -26,7 +26,7 @@ import (
 // WordList ...
 // Represents a list of words.
 type WordList struct {
-	words []Word
+	Words []Word
 }
 
 const wordListFileName = "wordlist.json"
@@ -42,7 +42,7 @@ func (w *WordList) Load() error {
 	}
 
 	// Unmarshal configuration
-	err = json.Unmarshal(rawContent, &w.words)
+	err = json.Unmarshal(rawContent, &w.Words)
 	if err != nil {
 		log.Print(err)
 		return err

@@ -20,8 +20,8 @@ package entities
 // LocalizedWord ...
 // Represents a word in a specific language.
 type LocalizedWord struct {
-	languageCode string
-	word         string
+	LanguageCode string `json:"language-code"`
+	Word         string `json:"word"`
 }
 
 // Word ...

@@ -11,6 +11,7 @@
       { "ja": "hello-japanese" },
       { "el": "hello-greek" }
     ],
-    "meaning": ""
+    "type": "interjection",
+    "meaning": "used to express a greeting, answer a telephone, or attract attention."
   }
 ]

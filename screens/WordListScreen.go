@@ -18,6 +18,8 @@
 package screens
 
 import (
+	"fmt"
+
 	"github.com/stuartthompson/dailyvocab/entities"
 	"github.com/stuartthompson/dailyvocab/io"
 )
@@ -35,5 +37,12 @@ func (s *WordListScreen) Render() {
 	io.RenderPaneBorder(0, 0, width-1, height-1, 72, 0)
 	io.RenderText("Word List", 1, 1, 255, 0)
 	io.RenderText("The word list is shown here.", 1, 3, 255, 0)
+
+	// Render word list
+	for i := 0; i < len(s.WordList.Words); i++ {
+		w := s.WordList.Words[i]
+		s := fmt.Sprintf("Word %d: %d %s", i, w.ID, w.Meaning)
+		io.RenderText(s, 1, 5+i, 255, 0)
+	}
 	io.Flush()
 }
