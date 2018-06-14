@@ -20,13 +20,16 @@ package screens
 import (
 	"fmt"
 
+	"github.com/stuartthompson/dailyvocab/configuration"
+
 	"github.com/stuartthompson/dailyvocab/entities"
 	"github.com/stuartthompson/dailyvocab/io"
 )
 
 // WordListScreen ...
 type WordListScreen struct {
-	WordList *entities.WordList
+	Configuration *configuration.AppConfig
+	WordList      *entities.WordList
 }
 
 // Render ...
@@ -41,7 +44,9 @@ func (s *WordListScreen) Render() {
 	// Render word list
 	for i := 0; i < len(s.WordList.Words); i++ {
 		w := s.WordList.Words[i]
-		s := fmt.Sprintf("Word %d: %d %s", i, w.ID, w.Meaning)
+		// Get the word in the default language
+		word := s.WordList.GetWord(w.ID, s.Configuration.DefaultLanguage)
+		s := fmt.Sprintf("Word %d: %d %s", i, w.ID, word)
 		io.RenderText(s, 1, 5+i, 255, 0)
 	}
 	io.Flush()

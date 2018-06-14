@@ -85,7 +85,7 @@ func (a *AppConfig) buildConfigFilePath() (string, error) {
 // Writes a default configuration file.
 func (a *AppConfig) writeDefaultConfiguration(configFilePath string) {
 	log.Print("Writing default configuration")
-	config := AppConfig{DefaultLanguage: "english"}
+	config := AppConfig{DefaultLanguage: "en-us"}
 	configJSON, err := json.Marshal(config)
 	if err != nil {
 		log.Print("Error marshaling json.")

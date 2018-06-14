@@ -2,8 +2,8 @@
   {
     "id": 1,
     "translations": [
-      { "en-us": "hello" },
-      { "fr": "bonjour" },
+      { "languageCode":"en-us", "word": "hello" },
+      { "languageCode": "fr", "word": "bonjour" },
       { "it": "hello-italian" },
       { "es": "hello-spanish" },
       { "es-mx": "hello-mexican" },

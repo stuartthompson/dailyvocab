@@ -50,3 +50,33 @@ func (w *WordList) Load() error {
 
 	return nil
 }
+
+// GetWord ...
+// Gets a word in a specific language.
+func (w *WordList) GetWord(id int, languageCode string) string {
+	// Find the requested word
+	var word Word
+	// TODO: Store a hashmap for lookup by word id
+	for i := 0; i < len(w.Words); i++ {
+		if w.Words[i].ID == id {
+			word = w.Words[i]
+		}
+		continue
+	}
+
+	// If no word found with that id then return nil
+	if w == nil {
+		// TODO: Log this and handle this better
+		return ""
+	}
+
+	// Get the requested translation for this word
+	var translated string
+	for i := 0; i < len(word.Translations); i++ {
+		if word.Translations[i].LanguageCode == languageCode {
+			translated = word.Translations[i].Word
+		}
+	}
+
+	return translated
+}

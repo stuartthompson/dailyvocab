@@ -98,8 +98,8 @@ func (a *App) Run() {
 	}
 
 	// Initialize screens
-	a.wordListScreen = &screens.WordListScreen{WordList: a.wordList}
-	a.configScreen = &screens.ConfigScreen{Config: a.configuration}
+	a.wordListScreen = &screens.WordListScreen{WordList: a.wordList, Configuration: a.configuration}
+	a.configScreen = &screens.ConfigScreen{Configuration: a.configuration}
 
 	// Register keypress handlers
 	a.registerKeypressHandlers()

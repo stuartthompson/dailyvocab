@@ -24,7 +24,7 @@ import (
 
 // ConfigScreen ...
 type ConfigScreen struct {
-	Config *configuration.AppConfig
+	Configuration *configuration.AppConfig
 }
 
 // Render ...
@@ -34,6 +34,6 @@ func (s *ConfigScreen) Render() {
 	width, height := io.GetWindowSize()
 	io.RenderPaneBorder(0, 0, width-1, height-1, 200, 0)
 	io.RenderText("Config", 1, 1, 255, 0)
-	io.RenderText("Default language: "+s.Config.DefaultLanguage, 1, 3, 255, 0)
+	io.RenderText("Default language: "+s.Configuration.DefaultLanguage, 1, 3, 255, 0)
 	io.Flush()
 }
