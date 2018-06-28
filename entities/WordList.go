@@ -52,21 +52,34 @@ func (w *WordList) Load() error {
 }
 
 // GetWord ...
-// Gets a word in a specific language.
-func (w *WordList) GetWord(id int, languageCode string) string {
+// Gets a word by id.
+func (w *WordList) GetWord(id int) *Word {
 	// Find the requested word
-	var word Word
+	var word *Word
 	// TODO: Store a hashmap for lookup by word id
 	for i := 0; i < len(w.Words); i++ {
 		if w.Words[i].ID == id {
-			word = w.Words[i]
+			word = &w.Words[i]
 		}
 		continue
 	}
 
 	// If no word found with that id then return nil
-	if w == nil {
+	if word == nil {
 		// TODO: Log this and handle this better
+		return nil
+	}
+
+	return word
+}
+
+// GetWordInLanguage ...
+// Gets a word in a specific language.
+func (w *WordList) GetWordInLanguage(id int, languageCode string) string {
+	// Get the requested word
+	word := w.GetWord(id)
+	if word == nil {
+		// TODO: Log this
 		return ""
 	}
 

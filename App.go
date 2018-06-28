@@ -24,6 +24,7 @@ import (
 	"github.com/stuartthompson/dailyvocab/configuration"
 	"github.com/stuartthompson/dailyvocab/entities"
 	"github.com/stuartthompson/dailyvocab/io"
+	"github.com/stuartthompson/dailyvocab/io/canvas"
 	"github.com/stuartthompson/dailyvocab/screens"
 )
 
@@ -55,17 +56,16 @@ type App struct {
 	wordListScreen  *screens.WordListScreen
 	configScreen    *screens.ConfigScreen
 	aboutScreen     *screens.AboutScreen
+	bottomBar       *screens.BottomBarComponent
 }
 
 // NewApp ...
 // Initializes a new application instance.
 func NewApp() *App {
 	app := &App{
-		isRunning:       true,
-		configuration:   &configuration.AppConfig{},
-		wordList:        &entities.WordList{},
-		dailyWordScreen: &screens.DailyWordScreen{},
-		aboutScreen:     &screens.AboutScreen{},
+		isRunning:     true,
+		configuration: &configuration.AppConfig{},
+		wordList:      &entities.WordList{},
 	}
 	app.eventListener = io.NewEventListener(app.Render)
 
@@ -97,9 +97,20 @@ func (a *App) Run() {
 		return
 	}
 
+	// Initialize canvas
+	width, height := io.GetWindowSize()
+
+	// TODO: Use flex-box logic to size canvases
+	bottomBarHeight := 3 // Height without borders
+	mainCanvas := canvas.NewCanvas(0, 0, width, height-bottomBarHeight)
+	bottomBarCanvas := canvas.NewCanvas(0, height-bottomBarHeight, width, bottomBarHeight)
+
 	// Initialize screens
-	a.wordListScreen = &screens.WordListScreen{WordList: a.wordList, Configuration: a.configuration}
-	a.configScreen = &screens.ConfigScreen{Configuration: a.configuration}
+	a.wordListScreen = screens.NewWordListScreen(a.configuration, a.wordList, mainCanvas)
+	a.configScreen = screens.NewConfigScreen(a.configuration, mainCanvas)
+	a.dailyWordScreen = screens.NewDailyWordScreen(a.configuration, mainCanvas)
+	a.aboutScreen = screens.NewAboutScreen(a.configuration, mainCanvas)
+	a.bottomBar = screens.NewBottomBarComponent(a.configuration, bottomBarCanvas)
 
 	// Register keypress handlers
 	a.registerKeypressHandlers()
@@ -117,6 +128,7 @@ func (a *App) Run() {
 // Render ...
 // Renders the current screen.
 func (a *App) Render() {
+	// Render current screen
 	switch a.currentScreen {
 	case DailyWordScreen:
 		a.dailyWordScreen.Render()
@@ -127,6 +139,11 @@ func (a *App) Render() {
 	case AboutScreen:
 		a.aboutScreen.Render()
 	}
+
+	// Render bottom bar
+	a.bottomBar.Render()
+
+	io.Flush()
 }
 
 // registerKeypressHandlers ...
@@ -134,8 +151,8 @@ func (a *App) Render() {
 func (a *App) registerKeypressHandlers() {
 	// TODO: Screens should really register their own list of keys vs. having a single global list
 	a.eventListener.RegisterKeypressHandler('?', a.showAboutScreen)
-	a.eventListener.RegisterKeypressHandler('d', a.showDailyWordScreen)
-	a.eventListener.RegisterKeypressHandler('w', a.showWordListScreen)
+	a.eventListener.RegisterKeypressHandler('w', a.showDailyWordScreen)
+	a.eventListener.RegisterKeypressHandler('l', a.showWordListScreen)
 	a.eventListener.RegisterKeypressHandler('c', a.showConfigScreen)
 	a.eventListener.RegisterKeypressHandler('q', a.onQuit)
 }
