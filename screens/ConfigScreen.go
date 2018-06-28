@@ -30,8 +30,10 @@ type ConfigScreen struct {
 
 // NewConfigScreen ...
 // Instantiates a new config screen.
-func NewConfigScreen(config *configuration.AppConfig) *ConfigScreen {
-	return &ConfigScreen{configuration: config}
+func NewConfigScreen(config *configuration.AppConfig, viewport *screen.Viewport) *ConfigScreen {
+	screenStyle := &screen.Style{ShowBorder: true, BorderColor: 100}
+	screen := screen.NewScreen(viewport, screenStyle)
+	return &ConfigScreen{screen: screen, configuration: config}
 }
 
 // Render ...

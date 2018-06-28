@@ -30,8 +30,10 @@ type BottomBarComponent struct {
 
 // NewBottomBarComponent ...
 // Instantiates a new bottom bar component.
-func NewBottomBarComponent(config *configuration.AppConfig) *BottomBarComponent {
-	return &BottomBarComponent{config: config}
+func NewBottomBarComponent(config *configuration.AppConfig, viewport *screen.Viewport) *BottomBarComponent {
+	screenStyle := &screen.Style{ShowBorder: true, BorderColor: 100}
+	screen := screen.NewScreen(viewport, screenStyle)
+	return &BottomBarComponent{screen: screen, config: config}
 }
 
 // Render ...

@@ -24,7 +24,7 @@ import (
 	"github.com/stuartthompson/dailyvocab/configuration"
 	"github.com/stuartthompson/dailyvocab/entities"
 	"github.com/stuartthompson/dailyvocab/io"
-	"github.com/stuartthompson/dailyvocab/io/canvas"
+	"github.com/stuartthompson/dailyvocab/io/screen"
 	"github.com/stuartthompson/dailyvocab/screens"
 )
 
@@ -102,15 +102,15 @@ func (a *App) Run() {
 
 	// TODO: Use flex-box logic to size canvases
 	bottomBarHeight := 3 // Height without borders
-	mainCanvas := canvas.NewCanvas(0, 0, width, height-bottomBarHeight)
-	bottomBarCanvas := canvas.NewCanvas(0, height-bottomBarHeight, width, bottomBarHeight)
+	mainViewport := screen.NewViewport(0, 0, width, height-bottomBarHeight)
+	bottomViewport := screen.NewViewport(0, height-bottomBarHeight, width, bottomBarHeight)
 
 	// Initialize screens
-	a.wordListScreen = screens.NewWordListScreen(a.configuration, a.wordList, mainCanvas)
-	a.configScreen = screens.NewConfigScreen(a.configuration, mainCanvas)
-	a.dailyWordScreen = screens.NewDailyWordScreen(a.configuration, mainCanvas)
-	a.aboutScreen = screens.NewAboutScreen(a.configuration, mainCanvas)
-	a.bottomBar = screens.NewBottomBarComponent(a.configuration, bottomBarCanvas)
+	a.wordListScreen = screens.NewWordListScreen(a.configuration, a.wordList, mainViewport)
+	a.configScreen = screens.NewConfigScreen(a.configuration, mainViewport)
+	a.dailyWordScreen = screens.NewDailyWordScreen(a.configuration, mainViewport)
+	a.aboutScreen = screens.NewAboutScreen(a.configuration, mainViewport)
+	a.bottomBar = screens.NewBottomBarComponent(a.configuration, bottomViewport)
 
 	// Register keypress handlers
 	a.registerKeypressHandlers()

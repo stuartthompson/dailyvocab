@@ -30,8 +30,10 @@ type DailyWordScreen struct {
 
 // NewDailyWordScreen ...
 // Instantiates a new daily word screen.
-func NewDailyWordScreen(config *configuration.AppConfig) *DailyWordScreen {
-	return &DailyWordScreen{configuration: config}
+func NewDailyWordScreen(config *configuration.AppConfig, viewport *screen.Viewport) *DailyWordScreen {
+	screenStyle := &screen.Style{ShowBorder: true, BorderColor: 100}
+	screen := screen.NewScreen(viewport, screenStyle)
+	return &DailyWordScreen{screen: screen, configuration: config}
 }
 
 // Render ...

@@ -35,8 +35,10 @@ type WordListScreen struct {
 
 // NewWordListScreen ...
 // Instantiates a new word list screen.
-func NewWordListScreen(config *configuration.AppConfig, wordList *entities.WordList) *WordListScreen {
-	return &WordListScreen{configuration: config, wordList: wordList}
+func NewWordListScreen(config *configuration.AppConfig, wordList *entities.WordList, viewport *screen.Viewport) *WordListScreen {
+	screenStyle := &screen.Style{ShowBorder: true, BorderColor: 100}
+	screen := screen.NewScreen(viewport, screenStyle)
+	return &WordListScreen{screen: screen, configuration: config, wordList: wordList}
 }
 
 // Render ...
