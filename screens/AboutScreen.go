@@ -18,20 +18,27 @@
 package screens
 
 import (
-	"github.com/stuartthompson/dailyvocab/io"
+	"github.com/stuartthompson/dailyvocab/configuration"
+	"github.com/stuartthompson/dailyvocab/io/screen"
 )
 
 // AboutScreen ...
 type AboutScreen struct {
+	screen        *screen.Screen
+	configuration *configuration.AppConfig
+}
+
+// NewAboutScreen ...
+// Instantiates a new about screen.
+func NewAboutScreen(config *configuration.AppConfig) *AboutScreen {
+	return &AboutScreen{configuration: config}
 }
 
 // Render ...
 // Renders the about screen.
 func (s *AboutScreen) Render() {
-	io.ClearScreen(0)
-	width, height := io.GetWindowSize()
-	io.RenderPaneBorder(0, 0, width-1, height-1, 212, 0)
-	io.RenderText("About", 1, 1, 255, 0)
-	io.RenderText("DailyVocab presents a word of the day in different languages.", 1, 3, 255, 0)
-	io.Flush()
+	s.screen.Clear()
+
+	s.screen.RenderText("About", 1, 1, 255, 0)
+	s.screen.RenderText("DailyVocab presents a word of the day in different languages.", 1, 3, 255, 0)
 }

@@ -22,22 +22,22 @@ import (
 	"github.com/stuartthompson/dailyvocab/io/screen"
 )
 
-// DailyWordScreen ...
-type DailyWordScreen struct {
-	screen        *screen.Screen
-	configuration *configuration.AppConfig
+// BottomBarComponent ...
+type BottomBarComponent struct {
+	screen *screen.Screen
+	config *configuration.AppConfig
 }
 
-// NewDailyWordScreen ...
-// Instantiates a new daily word screen.
-func NewDailyWordScreen(config *configuration.AppConfig) *DailyWordScreen {
-	return &DailyWordScreen{configuration: config}
+// NewBottomBarComponent ...
+// Instantiates a new bottom bar component.
+func NewBottomBarComponent(config *configuration.AppConfig) *BottomBarComponent {
+	return &BottomBarComponent{config: config}
 }
 
 // Render ...
-// Renders the daily word screen.
-func (s *DailyWordScreen) Render() {
-	s.screen.Clear()
-	s.screen.RenderText("Word of the Day", 1, 1, 255, 0)
-	s.screen.RenderText("English: ", 1, 3, 255, 0)
+// Renders the bottom bar component.
+func (c *BottomBarComponent) Render() {
+	c.screen.Clear()
+
+	c.screen.RenderText("Bottom Bar", 0, 0, 255, 0)
 }

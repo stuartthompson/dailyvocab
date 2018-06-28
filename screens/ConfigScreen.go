@@ -19,21 +19,26 @@ package screens
 
 import (
 	"github.com/stuartthompson/dailyvocab/configuration"
-	"github.com/stuartthompson/dailyvocab/io"
+	"github.com/stuartthompson/dailyvocab/io/screen"
 )
 
 // ConfigScreen ...
 type ConfigScreen struct {
-	Configuration *configuration.AppConfig
+	screen        *screen.Screen
+	configuration *configuration.AppConfig
+}
+
+// NewConfigScreen ...
+// Instantiates a new config screen.
+func NewConfigScreen(config *configuration.AppConfig) *ConfigScreen {
+	return &ConfigScreen{configuration: config}
 }
 
 // Render ...
 // Renders the config screen.
 func (s *ConfigScreen) Render() {
-	io.ClearScreen(0)
-	width, height := io.GetWindowSize()
-	io.RenderPaneBorder(0, 0, width-1, height-1, 200, 0)
-	io.RenderText("Config", 1, 1, 255, 0)
-	io.RenderText("Default language: "+s.Configuration.DefaultLanguage, 1, 3, 255, 0)
-	io.Flush()
+	s.screen.Clear()
+
+	s.screen.RenderText("Config", 1, 1, 255, 0)
+	s.screen.RenderText("Default language: "+s.configuration.DefaultLanguage, 1, 3, 255, 0)
 }

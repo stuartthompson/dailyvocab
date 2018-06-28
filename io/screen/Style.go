@@ -15,29 +15,11 @@
 // You should have received a copy of the GNU General Public License
 // along with DailyVocab. If not, see <http://www.gnu.org/licenses/>.
 
-package screens
+package screen
 
-import (
-	"github.com/stuartthompson/dailyvocab/configuration"
-	"github.com/stuartthompson/dailyvocab/io/screen"
-)
-
-// DailyWordScreen ...
-type DailyWordScreen struct {
-	screen        *screen.Screen
-	configuration *configuration.AppConfig
-}
-
-// NewDailyWordScreen ...
-// Instantiates a new daily word screen.
-func NewDailyWordScreen(config *configuration.AppConfig) *DailyWordScreen {
-	return &DailyWordScreen{configuration: config}
-}
-
-// Render ...
-// Renders the daily word screen.
-func (s *DailyWordScreen) Render() {
-	s.screen.Clear()
-	s.screen.RenderText("Word of the Day", 1, 1, 255, 0)
-	s.screen.RenderText("English: ", 1, 3, 255, 0)
+// Style ...
+// Represents style settings for a canvas.
+type Style struct {
+	showBorder  bool
+	borderColor int
 }

@@ -33,6 +33,16 @@ const (
 	BorderRuneCornerBottomRight = rune('\u255D')
 )
 
+// ClearArea ...
+// Clears an area to the specified background color.
+func ClearArea(x int, y int, width int, height int, bgColor int) {
+	for ix := 0; ix < width; ix++ {
+		for iy := 0; iy < height; iy++ {
+			termbox.SetCell(x+ix, y+iy, ' ', 0, termbox.Attribute(bgColor))
+		}
+	}
+}
+
 // ClearScreen ...
 // Clears the screen using a specified color.
 func ClearScreen(bgColor int) {

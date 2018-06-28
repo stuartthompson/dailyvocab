@@ -21,33 +21,38 @@ import (
 	"fmt"
 
 	"github.com/stuartthompson/dailyvocab/configuration"
+	"github.com/stuartthompson/dailyvocab/io/screen"
 
 	"github.com/stuartthompson/dailyvocab/entities"
-	"github.com/stuartthompson/dailyvocab/io"
 )
 
 // WordListScreen ...
 type WordListScreen struct {
-	Configuration *configuration.AppConfig
-	WordList      *entities.WordList
+	screen        *screen.Screen
+	configuration *configuration.AppConfig
+	wordList      *entities.WordList
+}
+
+// NewWordListScreen ...
+// Instantiates a new word list screen.
+func NewWordListScreen(config *configuration.AppConfig, wordList *entities.WordList) *WordListScreen {
+	return &WordListScreen{configuration: config, wordList: wordList}
 }
 
 // Render ...
 // Renders the about screen.
 func (s *WordListScreen) Render() {
-	io.ClearScreen(0)
-	width, height := io.GetWindowSize()
-	io.RenderPaneBorder(0, 0, width-1, height-1, 72, 0)
-	io.RenderText("Word List", 1, 1, 255, 0)
-	io.RenderText("The word list is shown here.", 1, 3, 255, 0)
+	s.screen.Clear()
+
+	s.screen.RenderText("Word List", 1, 1, 255, 0)
+	s.screen.RenderText("The word list is shown here.", 1, 3, 255, 0)
 
 	// Render word list
-	for i := 0; i < len(s.WordList.Words); i++ {
-		w := s.WordList.Words[i]
+	for i := 0; i < len(s.wordList.Words); i++ {
+		w := s.wordList.Words[i]
 		// Get the word in the default language
-		word := s.WordList.GetWord(w.ID, s.Configuration.DefaultLanguage)
-		s := fmt.Sprintf("Word %d: %d %s", i, w.ID, word)
-		io.RenderText(s, 1, 5+i, 255, 0)
+		word := s.wordList.GetWordInLanguage(w.ID, s.configuration.DefaultLanguage)
+		str := fmt.Sprintf("Word %d: %d %s", i, w.ID, word)
+		s.screen.RenderText(str, 1, 5+i, 255, 0)
 	}
-	io.Flush()
 }
