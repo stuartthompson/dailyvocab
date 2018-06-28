@@ -5,25 +5,22 @@ import "github.com/stuartthompson/dailyvocab/io"
 // Screen ...
 // Represents a screen that can be rendered.
 type Screen struct {
-	x      int
-	y      int
-	width  int
-	height int
-	style  *Style // A style object describing the appearance
+	viewport *Viewport
+	style    *Style // A style object describing the appearance
 }
 
 // NewScreen ...
 // Creates a new screen.
-func NewScreen(x int, y int, width int, height int, style *Style) *Screen {
-	return &Screen{x: x, y: y, width: width, height: height, style: style}
+func NewScreen(viewport *Viewport, style *Style) *Screen {
+	return &Screen{viewport: viewport, style: style}
 }
 
 // Clear ...
 // Clears the screen, ready for rendering.
 func (s *Screen) Clear() {
-	io.ClearArea(s.x, s.y, s.x+s.width, s.y+s.height, 0)
-	if s.style.showBorder == true {
-		io.RenderPaneBorder(s.x, s.y, s.width-1, s.height-1, 0, s.style.borderColor)
+	io.ClearArea(s.viewport.x, s.viewport.y, s.viewport.x+s.viewport.width, s.viewport.y+s.viewport.height, 0)
+	if s.style.ShowBorder == true {
+		io.RenderPaneBorder(s.viewport.x, s.viewport.y, s.viewport.width-1, s.viewport.height-1, 0, s.style.BorderColor)
 	}
 }
 
@@ -32,15 +29,15 @@ func (s *Screen) Clear() {
 func (s *Screen) RenderText(text string, x int, y int, fgColor int, bgColor int) {
 	// TODO: Check that text fits within the pane
 	// TODO: Clean up calculation of x and y position (too confusing)
-	io.RenderText(text, s.x+x+1, s.y+y+1, fgColor, bgColor)
+	io.RenderText(text, s.viewport.x+x+1, s.viewport.y+y+1, fgColor, bgColor)
 }
 
 // MoveAndResize ...
 // Moves the screen and resizes it.
-func (s *Screen) MoveAndResize(x int, y int, width int, height int) {
+func (s *Screen) MoveAndResize(viewport Viewport) {
 	// Set the new canvas position and size
-	s.x = x
-	s.y = y
-	s.width = width
-	s.height = height
+	s.viewport.x = viewport.x
+	s.viewport.y = viewport.y
+	s.viewport.width = viewport.width
+	s.viewport.height = viewport.height
 }

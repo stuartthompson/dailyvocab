@@ -17,9 +17,17 @@
 
 package screen
 
-// Style ...
-// Represents style settings for a canvas.
-type Style struct {
-	ShowBorder  bool
-	BorderColor int
+// Viewport ...
+// Represents a viewport to which a screen can render.
+type Viewport struct {
+	x      int
+	y      int
+	width  int
+	height int
+}
+
+// NewViewport ...
+// Creates a new viewport.
+func NewViewport(x int, y int, width int, height int) *Viewport {
+	return &Viewport{x: x, y: y, width: width, height: height}
 }
