@@ -33,7 +33,15 @@ const configFileName = ".dailyvocab"
 // AppConfig ...
 // Represents configuration for the application.
 type AppConfig struct {
-	DefaultLanguage string `json:"DefaultLanguage"`
+	DefaultLanguage string       `json:"default-language"`
+	ViewedWords     []ViewedWord `json:"viewed-words"`
+}
+
+// ViewedWord ...
+// Represents a record indicating when a word was viewed.
+type ViewedWord struct {
+	ID             int    `json:"id"`
+	MarkedViewedAt string `json:"marked-viewed-at"`
 }
 
 // ReadConfiguration ...

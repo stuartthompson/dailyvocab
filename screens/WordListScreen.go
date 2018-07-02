@@ -53,7 +53,9 @@ func (s *WordListScreen) Render() {
 		w := s.vocabulary.Words[i]
 		// Get the word in the default language
 		word := s.vocabulary.GetWordInLanguage(w.ID, s.configuration.DefaultLanguage)
-		str := fmt.Sprintf("Word %d: %d %s", i, w.ID, word)
+		// Get total number of languages
+		numLangs := len(s.vocabulary.Words[i].Translations)
+		str := fmt.Sprintf("[%d] %s (in %d languages)", w.ID, word, numLangs)
 		s.screen.RenderText(str, 1, 5+i, 255, 0)
 	}
 }
