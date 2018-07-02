@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with DailyVocab. If not, see <http://www.gnu.org/licenses/>.
 
-package entities
+package app
 
 import (
 	"encoding/json"
@@ -23,17 +23,40 @@ import (
 	"log"
 )
 
-// WordList ...
+const wordListFileName = "wordlist.json"
+
+// LocalizedWord ...
+// Represents a word in a specific language.
+type LocalizedWord struct {
+	LanguageCode string `json:"languageCode"`
+	Native       string `json:"native"`
+	Anglicized   string `json:"anglicized"`
+}
+
+// Word ...
+// Represents a word.
+type Word struct {
+	ID           int             `json:"id"`
+	Translations []LocalizedWord `json:"translations"`
+	Usage        []WordUsage     `json:"usage"`
+}
+
+// Vocabulary ...
 // Represents a list of words.
-type WordList struct {
+type Vocabulary struct {
 	Words []Word
 }
 
-const wordListFileName = "wordlist.json"
+// WordUsage ...
+// Describes how a word is used.
+type WordUsage struct {
+	Type    string `json:"type"`
+	Meaning string `json:"meaning"`
+}
 
 // Load ...
 // Loads the word list.
-func (w *WordList) Load() error {
+func (v *Vocabulary) Load() error {
 	// Read word list
 	rawContent, err := ioutil.ReadFile(wordListFileName)
 	if err != nil {
@@ -42,7 +65,7 @@ func (w *WordList) Load() error {
 	}
 
 	// Unmarshal configuration
-	err = json.Unmarshal(rawContent, &w.Words)
+	err = json.Unmarshal(rawContent, &v.Words)
 	if err != nil {
 		log.Print(err)
 		return err
@@ -53,13 +76,13 @@ func (w *WordList) Load() error {
 
 // GetWord ...
 // Gets a word by id.
-func (w *WordList) GetWord(id int) *Word {
+func (v *Vocabulary) GetWord(id int) *Word {
 	// Find the requested word
 	var word *Word
 	// TODO: Store a hashmap for lookup by word id
-	for i := 0; i < len(w.Words); i++ {
-		if w.Words[i].ID == id {
-			word = &w.Words[i]
+	for i := 0; i < len(v.Words); i++ {
+		if v.Words[i].ID == id {
+			word = &v.Words[i]
 		}
 		continue
 	}
@@ -75,9 +98,9 @@ func (w *WordList) GetWord(id int) *Word {
 
 // GetWordInLanguage ...
 // Gets a word in a specific language.
-func (w *WordList) GetWordInLanguage(id int, languageCode string) string {
+func (v *Vocabulary) GetWordInLanguage(id int, languageCode string) string {
 	// Get the requested word
-	word := w.GetWord(id)
+	word := v.GetWord(id)
 	if word == nil {
 		// TODO: Log this
 		return ""
@@ -87,7 +110,7 @@ func (w *WordList) GetWordInLanguage(id int, languageCode string) string {
 	var translated string
 	for i := 0; i < len(word.Translations); i++ {
 		if word.Translations[i].LanguageCode == languageCode {
-			translated = word.Translations[i].Word
+			translated = word.Translations[i].Native
 		}
 	}
 

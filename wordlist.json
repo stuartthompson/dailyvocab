@@ -2,16 +2,49 @@
   {
     "id": 1,
     "translations": [
-      { "languageCode":"en-us", "word": "hello" },
-      { "languageCode": "fr", "word": "bonjour" },
-      { "it": "hello-italian" },
-      { "es": "hello-spanish" },
-      { "es-mx": "hello-mexican" },
-      { "de": "hello-german" },
-      { "ja": "hello-japanese" },
-      { "el": "hello-greek" }
+      { "languageCode": "en-us", "native": "hello" },
+      { "languageCode": "fr", "native": "bonjour" },
+      { "languageCode": "it", "native": "ciao" },
+      { "languageCode": "es", "native": "hola" },
+      { "languageCode": "de", "native": "hallo" },
+      { "languageCode": "ja", "native": "kon'nichiwa" },
+      { "languageCode": "el", "native": "xαίρετε", "anglicized": "chaírete" }
     ],
     "type": "interjection",
-    "meaning": "used to express a greeting, answer a telephone, or attract attention."
+    "usage": [
+      { "type" : "interjection", "meaning": "used to express a greeting, answer a telephone, or attract attention." }
+    ]
+  },
+  {
+    "id": 2,
+    "translations": [
+      { "languageCode": "en-us", "native": "goodbye" },
+      { "languageCode": "fr", "native": "au revoir" },
+      { "languageCode": "it", "native": "goodbye-italian" },
+      { "languageCode": "es", "native": "goodbye-spanish" },
+      { "languageCode": "de", "native": "goodbye-german" },
+      { "languageCode": "ja", "native": "goodbye-japanese" },
+      { "languageCode": "el", "native": "xαίρετε", "anglicized": "chaírete" }
+    ],
+    "usage": [
+      { "interjection": "used to express good wishes when parting or at the end of a conversation." }
+    ]
+  },
+  {
+    "id": 3,
+    "translations": [
+      { "languageCode": "en-us", "native": "morning" },
+      { "languageCode": "fr", "native": "" },
+      { "languageCode": "it", "native": "morning-italian" },
+      { "languageCode": "es", "native": "goodbye-spanish" },
+      { "languageCode": "de", "native": "goodbye-german" },
+      { "languageCode": "ja", "native": "goodbye-japanese" },
+      { "languageCode": "el", "native": "xαίρετε", "anglicized": "chaírete" }
+    ],
+    "usage": [
+      { "type": "noun", "meaning": "the period of time between midnight and noon, especially from sunrise to noon." },
+      { "type": "adverb", "meaning": "every morning" },
+      { "type": "exclamation", "meaning": "short for 'good morning'" }
+    ]
   }
 ]

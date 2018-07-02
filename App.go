@@ -21,8 +21,8 @@ import (
 	"log"
 
 	termbox "github.com/nsf/termbox-go"
+	"github.com/stuartthompson/dailyvocab/app"
 	"github.com/stuartthompson/dailyvocab/configuration"
-	"github.com/stuartthompson/dailyvocab/entities"
 	"github.com/stuartthompson/dailyvocab/io"
 	"github.com/stuartthompson/dailyvocab/io/screen"
 	"github.com/stuartthompson/dailyvocab/screens"
@@ -50,7 +50,7 @@ type App struct {
 	isRunning       bool
 	eventListener   *io.EventListener
 	configuration   *configuration.AppConfig
-	wordList        *entities.WordList
+	vocabulary      *app.Vocabulary
 	currentScreen   Screen
 	dailyWordScreen *screens.DailyWordScreen
 	wordListScreen  *screens.WordListScreen
@@ -65,7 +65,7 @@ func NewApp() *App {
 	app := &App{
 		isRunning:     true,
 		configuration: &configuration.AppConfig{},
-		wordList:      &entities.WordList{},
+		vocabulary:    &app.Vocabulary{},
 	}
 	app.eventListener = io.NewEventListener(app.Render)
 
@@ -90,10 +90,10 @@ func (a *App) Run() {
 		return
 	}
 
-	// Read word list
-	err = a.wordList.Load()
+	// Read vocabulary
+	err = a.vocabulary.Load()
 	if err != nil {
-		log.Print("Unable to read word list. Exiting.")
+		log.Print("Unable to read vocabulary from word list file. Exiting.")
 		return
 	}
 
@@ -106,7 +106,7 @@ func (a *App) Run() {
 	bottomViewport := screen.NewViewport(0, height-bottomBarHeight, width, bottomBarHeight)
 
 	// Initialize screens
-	a.wordListScreen = screens.NewWordListScreen(a.configuration, a.wordList, mainViewport)
+	a.wordListScreen = screens.NewWordListScreen(a.configuration, a.vocabulary, mainViewport)
 	a.configScreen = screens.NewConfigScreen(a.configuration, mainViewport)
 	a.dailyWordScreen = screens.NewDailyWordScreen(a.configuration, mainViewport)
 	a.aboutScreen = screens.NewAboutScreen(a.configuration, mainViewport)

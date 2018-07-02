@@ -20,25 +20,24 @@ package screens
 import (
 	"fmt"
 
+	"github.com/stuartthompson/dailyvocab/app"
 	"github.com/stuartthompson/dailyvocab/configuration"
 	"github.com/stuartthompson/dailyvocab/io/screen"
-
-	"github.com/stuartthompson/dailyvocab/entities"
 )
 
 // WordListScreen ...
 type WordListScreen struct {
 	screen        *screen.Screen
 	configuration *configuration.AppConfig
-	wordList      *entities.WordList
+	vocabulary    *app.Vocabulary
 }
 
 // NewWordListScreen ...
 // Instantiates a new word list screen.
-func NewWordListScreen(config *configuration.AppConfig, wordList *entities.WordList, viewport *screen.Viewport) *WordListScreen {
+func NewWordListScreen(config *configuration.AppConfig, vocabulary *app.Vocabulary, viewport *screen.Viewport) *WordListScreen {
 	screenStyle := &screen.Style{ShowBorder: true, BorderColor: 100}
 	screen := screen.NewScreen(viewport, screenStyle)
-	return &WordListScreen{screen: screen, configuration: config, wordList: wordList}
+	return &WordListScreen{screen: screen, configuration: config, vocabulary: vocabulary}
 }
 
 // Render ...
@@ -50,10 +49,10 @@ func (s *WordListScreen) Render() {
 	s.screen.RenderText("The word list is shown here.", 1, 3, 255, 0)
 
 	// Render word list
-	for i := 0; i < len(s.wordList.Words); i++ {
-		w := s.wordList.Words[i]
+	for i := 0; i < len(s.vocabulary.Words); i++ {
+		w := s.vocabulary.Words[i]
 		// Get the word in the default language
-		word := s.wordList.GetWordInLanguage(w.ID, s.configuration.DefaultLanguage)
+		word := s.vocabulary.GetWordInLanguage(w.ID, s.configuration.DefaultLanguage)
 		str := fmt.Sprintf("Word %d: %d %s", i, w.ID, word)
 		s.screen.RenderText(str, 1, 5+i, 255, 0)
 	}
