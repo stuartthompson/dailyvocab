@@ -22,6 +22,10 @@ import (
 	"github.com/stuartthompson/dailyvocab/io/screen"
 )
 
+// borderColor ...
+// The border color for this component.
+const borderColor = 54 // Purple (#5f0087)
+
 // BottomBarComponent ...
 type BottomBarComponent struct {
 	screen *screen.Screen
@@ -31,7 +35,7 @@ type BottomBarComponent struct {
 // NewBottomBarComponent ...
 // Instantiates a new bottom bar component.
 func NewBottomBarComponent(config *configuration.AppConfig, viewport *screen.Viewport) *BottomBarComponent {
-	screenStyle := &screen.Style{ShowBorder: true, BorderColor: 100}
+	screenStyle := &screen.Style{ShowBorder: true, BorderColor: borderColor}
 	screen := screen.NewScreen(viewport, screenStyle)
 	return &BottomBarComponent{screen: screen, config: config}
 }

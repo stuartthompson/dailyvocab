@@ -101,7 +101,7 @@ func (a *App) Run() {
 	width, height := io.GetWindowSize()
 
 	// TODO: Use flex-box logic to size canvases
-	bottomBarHeight := 3 // Height without borders
+	bottomBarHeight := 7 // Height including borders
 	mainViewport := screen.NewViewport(0, 0, width, height-bottomBarHeight)
 	bottomViewport := screen.NewViewport(0, height-bottomBarHeight, width, bottomBarHeight)
 

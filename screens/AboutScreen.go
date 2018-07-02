@@ -31,7 +31,7 @@ type AboutScreen struct {
 // NewAboutScreen ...
 // Instantiates a new about screen.
 func NewAboutScreen(config *configuration.AppConfig, viewport *screen.Viewport) *AboutScreen {
-	screenStyle := &screen.Style{ShowBorder: true, BorderColor: 100}
+	screenStyle := &screen.Style{ShowBorder: true, BorderColor: 218}
 	screen := screen.NewScreen(viewport, screenStyle)
 	return &AboutScreen{screen: screen, configuration: config}
 }
