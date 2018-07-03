@@ -18,6 +18,8 @@
 package screens
 
 import (
+	"fmt"
+
 	"github.com/stuartthompson/dailyvocab/configuration"
 	"github.com/stuartthompson/dailyvocab/io/screen"
 )
@@ -43,4 +45,33 @@ func (s *AboutScreen) Render() {
 
 	s.screen.RenderText("About", 1, 1, 255, 0)
 	s.screen.RenderText("DailyVocab presents a word of the day in different languages.", 1, 3, 255, 0)
+
+	// Render color grid
+	s.screen.RenderText("Colors", 1, 5, 255, 0)
+
+	rowIndex := 0
+	columnIndex := 0
+	xOffset := 1
+	yOffset := 6
+	for colorCode := 0; colorCode < 256; colorCode++ {
+		str := fmt.Sprintf("%d", colorCode)
+		s.screen.RenderText(str, columnIndex+xOffset, rowIndex+yOffset, colorCode, 0)
+		rowIndex++
+		if rowIndex+yOffset > s.screen.GetHeight()-4 {
+			columnIndex += 4
+			rowIndex = 0
+		}
+	}
+
+	// Render background color grid
+	rowIndex = 0
+	columnIndex += 6
+	for colorCode := 0; colorCode < 256; colorCode++ {
+		s.screen.RenderText(fmt.Sprintf("%d", colorCode), columnIndex+xOffset, rowIndex+yOffset, 255, colorCode)
+		rowIndex++
+		if rowIndex+yOffset > s.screen.GetHeight()-4 {
+			columnIndex += 4
+			rowIndex = 0
+		}
+	}
 }
