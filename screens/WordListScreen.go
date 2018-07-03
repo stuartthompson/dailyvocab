@@ -62,13 +62,27 @@ func NewWordListScreen(config *configuration.AppConfig, vocabulary *app.Vocabula
 func (s *WordListScreen) Render() {
 	s.screen.Clear()
 
-	s.screen.RenderText("Word List", 1, 1, 255, 0)
-	s.screen.RenderText("The word list is shown here.", 1, 3, 255, 0)
+	s.screen.RenderText("Word List", 1, 0, 255, 0)
+
+	// Render header
+	totalWords := len(s.vocabulary.Words)
+	viewedWords := len(s.configuration.ViewedWords)
+	// Determine how many words will be displayed
+	wordsPerPage := s.screen.GetHeight() - 5
+	pageNum := 1
+	startIndex := (wordsPerPage * (pageNum - 1)) + 1
+	endIndex := startIndex + wordsPerPage
+	if endIndex > totalWords {
+		endIndex = totalWords
+	}
+	// Render header text
+	headerText := fmt.Sprintf("Showing %d - %d of %d total words. Viewed %d.", startIndex, endIndex, totalWords, viewedWords)
+	s.screen.RenderText(headerText, 1, 2, 255, 0)
 
 	// Render word list
 	for i := 0; i < len(s.vocabulary.Words); i++ {
 		// Calculate y-coordinate at which to render this line
-		y := 5 + i
+		y := 4 + i
 
 		w := s.vocabulary.Words[i]
 		// Get the word in the default language
@@ -84,9 +98,6 @@ func (s *WordListScreen) Render() {
 		s.screen.RenderText(str, 3, y, 255, 0)
 
 	}
-
-	str := fmt.Sprintf("Viewed: %d", len(s.viewedWords))
-	s.screen.RenderText(str, 1, 5+len(s.vocabulary.Words)+1, 2, 0)
 }
 
 // buildViewedWordsMap ...
