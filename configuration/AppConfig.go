@@ -70,6 +70,7 @@ func (a *AppConfig) ReadConfiguration() error {
 	json.Unmarshal(rawConfig, &config)
 
 	a.DefaultLanguage = config.DefaultLanguage
+	a.ViewedWords = config.ViewedWords
 	return nil
 }
 

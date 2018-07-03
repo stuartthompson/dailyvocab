@@ -25,19 +25,36 @@ import (
 	"github.com/stuartthompson/dailyvocab/io/screen"
 )
 
+// checkmarkColor ...
+// Color used for the checkmark displayed next to viewed words.
+const checkmarkColor = 3 // Green
+
+// screenBorderColor ...
+// Color used for the word list screen border.
+const screenBorderColor = 5 // Blue
+
 // WordListScreen ...
 type WordListScreen struct {
 	screen        *screen.Screen
-	configuration *configuration.AppConfig
-	vocabulary    *app.Vocabulary
+	configuration *configuration.AppConfig // Application configuration
+	viewedWords   map[int]string           // Map of viewed words by id
+	vocabulary    *app.Vocabulary          // The word list to render
 }
 
 // NewWordListScreen ...
 // Instantiates a new word list screen.
 func NewWordListScreen(config *configuration.AppConfig, vocabulary *app.Vocabulary, viewport *screen.Viewport) *WordListScreen {
-	screenStyle := &screen.Style{ShowBorder: true, BorderColor: 100}
+	screenStyle := &screen.Style{ShowBorder: true, BorderColor: screenBorderColor}
 	screen := screen.NewScreen(viewport, screenStyle)
-	return &WordListScreen{screen: screen, configuration: config, vocabulary: vocabulary}
+
+	// Create new word list screen
+	wordListScreen := &WordListScreen{screen: screen, configuration: config, vocabulary: vocabulary}
+
+	// Build viewed words map
+	wordListScreen.viewedWords = buildViewedWordsMap(config.ViewedWords)
+
+	// Return new word list screen
+	return wordListScreen
 }
 
 // Render ...
@@ -50,12 +67,37 @@ func (s *WordListScreen) Render() {
 
 	// Render word list
 	for i := 0; i < len(s.vocabulary.Words); i++ {
+		// Calculate y-coordinate at which to render this line
+		y := 5 + i
+
 		w := s.vocabulary.Words[i]
 		// Get the word in the default language
 		word := s.vocabulary.GetWordInLanguage(w.ID, s.configuration.DefaultLanguage)
 		// Get total number of languages
 		numLangs := len(s.vocabulary.Words[i].Translations)
+		// Render "viewed" checkmark (if word is marked viewed)
+		if s.viewedWords[w.ID] != "" {
+			s.screen.RenderText("✓", 1, y, checkmarkColor, 0)
+		}
+		// Render main list item text
 		str := fmt.Sprintf("[%d] %s (in %d languages)", w.ID, word, numLangs)
-		s.screen.RenderText(str, 1, 5+i, 255, 0)
+		s.screen.RenderText(str, 3, y, 255, 0)
+
 	}
+
+	str := fmt.Sprintf("Viewed: %d", len(s.viewedWords))
+	s.screen.RenderText(str, 1, 5+len(s.vocabulary.Words)+1, 2, 0)
+}
+
+// buildViewedWordsMap ...
+// Builds a map that is used to quickly look up words that have been viewed.
+// This is an optimization to speed up checking if a word has been viewed during the render cycle.
+func buildViewedWordsMap(viewedWords []configuration.ViewedWord) map[int]string {
+	viewedWordsMap := make(map[int]string)
+	// Build the map of viewed words
+	for i := 0; i < len(viewedWords); i++ {
+		viewedWordsMap[viewedWords[i].ID] = viewedWords[i].MarkedViewedAt
+	}
+
+	return viewedWordsMap
 }
